@@ -35,7 +35,7 @@ void PinochleGame::deal() {
 }
 
 // Independent suit evaluation function: 
-void suitIndependentEvaluation(const CardSet<PinochleRank, Suit>& hand, std::vector<PinochleMelds>& melds) {
+void PinochleGame::suitIndependentEvaluation(const CardSet<PinochleRank, Suit>& hand, std::vector<PinochleMelds>& melds) {
     CardSet<PinochleRank, Suit> localHand = hand;
 
     // Track counts of aces, kings, queens, and jacks
@@ -137,7 +137,18 @@ void suitIndependentEvaluation(const CardSet<PinochleRank, Suit>& hand, std::vec
 void PinochleGame::printPlayerHands() {
     for (size_t i = 0; i < player_names.size(); ++i) {
         std::cout << player_names[i] << "'s hand:\n";
+
         player_hands[i].print(std::cout, PINOCHLE_HAND_SIZE);  // Print player's hand
+
+        std::vector<PinochleMelds> possibleMelds;
+
+        suitIndependentEvaluation(player_hands[i], possibleMelds);
+
+        for (PinochleMelds meld: possibleMelds) {
+            std::cout << meld << std::endl;
+        }
+
+        std::cout << std::endl;
     }
 }
 
