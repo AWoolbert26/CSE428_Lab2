@@ -14,7 +14,7 @@
 #include "PinochleDeck.h"
 #include "Suit.h"
 #include "PinochleGame.h" 
-#include "HoldEmGame.h"  
+#include "HoldEmGame.h"
 #include "Game.h"   
 
 std::shared_ptr<Game> create(int argc, const char *argv[]) {

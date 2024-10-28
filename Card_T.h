@@ -21,8 +21,14 @@ struct Card {
 };
 
 template <typename Rank, typename Suits>
-
 std::ostream& operator<<(std::ostream&, const Card<Rank, Suits>&);
+
+template <typename Rank, typename Suits>
+bool compareByRankThenSuit(const Card<Rank, Suits>&, const Card<Rank, Suits>&);
+
+template <typename Rank, typename Suits>
+bool compareBySuitThenRank(const Card<Rank, Suits>&, const Card<Rank, Suits>&);
+
 
 #ifdef TEMPLATE_HEADERS_INCLUDE_SOURCE
 #include "Card_T.cpp"
