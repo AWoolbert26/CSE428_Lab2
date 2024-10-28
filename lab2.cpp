@@ -13,7 +13,7 @@
 #include "HoldEmDeck.h"
 #include "PinochleDeck.h"
 #include "Suit.h"
-#include "PinochleGame.h" 
+#include "PinochleGame.h"
 #include "HoldEmGame.h"
 #include "Game.h"   
 

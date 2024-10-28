@@ -17,6 +17,24 @@
 #include "Suit.h"
 #include "Constants.h"
 
+enum class PinochleMeld {
+    dix, 
+    offsuitmarriage, 
+    fortyjacks, 
+    pinochle, 
+    insuitmarriage, 
+    sixtyqueens, 
+    eightykings, 
+    hundredaces, 
+    insuitrun, 
+    doublepinochle, 
+    fourhundredjacks, 
+    sixhundredqueens, 
+    eighthundredkings, 
+    thousandaces, 
+    insuitdoublerun
+};
+
 class PinochleGame: public Game {
 private:
     PinochleDeck deck;

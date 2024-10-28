@@ -19,8 +19,6 @@ protected:
     // Protected vector of cards (parameterized by Rank and Suit)
     std::vector<Card<Rank, Suits> > cards;
 public:
-    CardSet() = default;
-    CardSet(const CardSet<Rank, Suits>&) = default;
     virtual ~CardSet() = default;
 
     void print(std::ostream&, size_t) const;
