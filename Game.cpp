@@ -9,11 +9,12 @@
  */
 
 #include "Game.h"
+#include "Constants.h"
 
 // In our implementation argv contains all the command line arguments, 
 // so the list of names starts from 2
-Game::Game(int argc, char* argv[]) {
-    for (int i = 2; i < argc; ++i) {
+Game::Game(int argc, const char* argv[]) {
+    for (int i = PLAYER_NAMES_START; i < argc; ++i) {
         player_names.push_back(argv[i]);
     }
 }

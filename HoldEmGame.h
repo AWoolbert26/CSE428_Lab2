@@ -27,7 +27,7 @@ enum class HoldEmState {
 };
 
 class HoldEmGame : public Game {
-protected:
+private:
 
     HoldEmState game_state;
     HoldEmDeck deck;
@@ -41,7 +41,7 @@ protected:
 
 public:
 
-    HoldEmGame(int, char* []);
+    HoldEmGame(int, const char* []);
     int play() override;
     virtual ~HoldEmGame() = default;
 };

@@ -24,4 +24,6 @@ template <typename Rank, typename Suits>
 
 std::ostream& operator<<(std::ostream&, const Card<Rank, Suits>&);
 
+#ifdef TEMPLATE_HEADERS_INCLUDE_SOURCE
 #include "Card_T.cpp"
+#endif

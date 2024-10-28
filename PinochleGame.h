@@ -18,7 +18,7 @@
 #include "Constants.h"
 
 class PinochleGame: public Game {
-protected:
+private:
     PinochleDeck deck;
     std::vector<CardSet<PinochleRank, Suit> > player_hands;
 
@@ -28,7 +28,7 @@ protected:
     void printPlayerHands();
     void collectCards();
 public:
-    PinochleGame(int, char* []);
+    PinochleGame(int, const char* []);
     virtual int play();
     virtual ~PinochleGame() = default;
 };

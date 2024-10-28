@@ -12,7 +12,7 @@
 #include "Constants.h"
 
 // PinochleGame constructor: Initializes player hands based on number of players
-PinochleGame::PinochleGame(int argc, char* argv[]): Game(argc, argv), deck() {
+PinochleGame::PinochleGame(int argc, const char* argv[]): Game(argc, argv), deck() {
     // Push back a hand (CardSet) for each player in the game
     for (size_t i = 0; i < player_names.size(); ++i) {
         player_hands.push_back(CardSet<PinochleRank, Suit>());

@@ -21,7 +21,7 @@ protected:
 
 public:
     // Constructor that takes an integer and an array of C-style strings
-    Game(int, char* []);
+    Game(int, const char* []);
 
     virtual int play() = 0;
     

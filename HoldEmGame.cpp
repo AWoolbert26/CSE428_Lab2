@@ -13,7 +13,7 @@
 #include "Constants.h"
 
 // Initialize the state to preflop and pass parameters to the game base class
-HoldEmGame::HoldEmGame(int argc, char* argv[]): Game(argc, argv), game_state(HoldEmState::preflop), deck(), board_cards() {
+HoldEmGame::HoldEmGame(int argc, const char* argv[]): Game(argc, argv), game_state(HoldEmState::preflop), deck(), board_cards() {
     // Push hands into the player hands vector.
     for (size_t i = 0; i < player_names.size(); ++i) {
         player_hands.emplace_back();

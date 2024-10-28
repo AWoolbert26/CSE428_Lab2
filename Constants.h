@@ -31,5 +31,8 @@ constexpr int HOLDEM_MAX_INPUT_VARS = 11;
 
 enum INPUT_VARS {
     EXECUTABLE,
-    GAME_NAME
+    GAME_NAME,
+    PLAYER_NAMES_START
 };
+
+constexpr int REQUIRED_ARGS = 2;

@@ -17,7 +17,7 @@
 #include "HoldEmGame.h"  
 #include "Game.h"   
 
-std::shared_ptr<Game> create(int argc, char *argv[]) {
+std::shared_ptr<Game> create(int argc, const char *argv[]) {
     // Error checking is done before hand so we don't have to do it in the create method.
     std::shared_ptr<Game> game_ptr;
 
@@ -31,8 +31,8 @@ std::shared_ptr<Game> create(int argc, char *argv[]) {
     return game_ptr;
 }
 
-int main(int argc, char* argv[]) {
-    if (argc < 2) {
+int main(int argc, const char* argv[]) {
+    if (argc < REQUIRED_ARGS) {
         std::cerr << "Usage: " << argv[EXECUTABLE] << " <GameType> <PlayerNames...>\n";
         std::cerr << "GameType: Pinochle <Player1> <Player2> <Player3> <Player4>\n";
         std::cerr << "         or HoldEm <Player1> <Player2> [<Player3> ... <Player9>]\n";

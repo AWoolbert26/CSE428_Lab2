@@ -23,4 +23,6 @@ public:
     void collect(CardSet<Rank, Suits>&);
 };
 
+#ifdef TEMPLATE_HEADERS_INCLUDE_SOURCE
 #include "Deck_T.cpp"
+#endif

@@ -22,6 +22,9 @@ public:
     void print(std::ostream&, size_t) const;
     bool is_empty() const; 
     CardSet<Rank, Suits>& operator>>(CardSet<Rank, Suits>& other); 
+    virtual ~CardSet() = default;
 };
 
+#ifdef TEMPLATE_HEADERS_INCLUDE_SOURCE
 #include "CardSet_T.cpp"
+#endif
