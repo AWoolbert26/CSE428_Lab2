@@ -10,6 +10,7 @@
 
 #include "PinochleGame.h"
 #include "Constants.h"
+#include <array>
 
 // PinochleGame constructor: Initializes player hands based on number of players
 PinochleGame::PinochleGame(int argc, const char* argv[]): Game(argc, argv), deck() {
@@ -57,3 +58,21 @@ int PinochleGame::play() {
 
     return SUCCESS_END_OF_GAME;  
 }
+
+std::array<unsigned int, 15> PinochleGame::meldPoints = {
+    10,   // dix
+    20,   // offsuitmarriage
+    40,   // fortyjacks
+    40,   // pinochle
+    40,   // insuitmarriage
+    60,   // sixtyqueens
+    80,   // eightykings
+    100,  // hundredaces
+    150,  // insuitrun
+    300,  // doublepinochle
+    400,  // fourhundredjacks
+    600,  // sixhundredqueens
+    800,  // eighthundredkings
+    1000, // thousandaces
+    1500  // insuitdoublerun
+};

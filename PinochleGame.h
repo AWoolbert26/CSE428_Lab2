@@ -11,6 +11,7 @@
 #pragma once
 
 #include <vector>
+#include <array>
 #include "Game.h"
 #include "PinochleDeck.h"
 #include "CardSet_T.h"
@@ -49,4 +50,6 @@ public:
     PinochleGame(int, const char* []);
     virtual int play();
     virtual ~PinochleGame() = default;
+
+    static std::array<unsigned int, 15> meldPoints;
 };
