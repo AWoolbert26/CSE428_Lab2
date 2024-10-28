@@ -56,9 +56,33 @@ private:
 
 public:
 
+    struct Player {
+        CardSet<HoldEmRank, Suit> hand; // CardSet containing the player's hand
+        std::string name;                // Player's name
+        HoldEmHandRank handRank;         // Player's hand rank
+
+        // Constructor for Player struct
+        Player(const CardSet<HoldEmRank, Suit>& hand, const std::string& name, HoldEmHandRank handRank)
+            : hand(hand), name(name), handRank(handRank) {}
+    };
+
     HoldEmGame(int, const char* []);
     int play() override;
     virtual ~HoldEmGame() = default;
 };
 
+// Print the Rank to the console
 std::ostream& operator<<(std::ostream&, const HoldEmHandRank&);
+
+// Check which player has the higher ranked hand
+bool operator<(const HoldEmGame::Player& lhs, const HoldEmGame::Player& rhs);
+
+// Helper functions to extract ranks and values
+HoldEmRank getPairRank(const CardSet<HoldEmRank, Suit>& hand);
+std::vector<HoldEmRank> getKickers(const CardSet<HoldEmRank, Suit>& hand);
+HoldEmRank getHigherPairRank(const CardSet<HoldEmRank, Suit>& hand);
+HoldEmRank getLowerPairRank(const CardSet<HoldEmRank, Suit>& hand);
+HoldEmRank getThreeOfAKindRank(const CardSet<HoldEmRank, Suit>& hand);
+HoldEmRank getFourOfAKindRank(const CardSet<HoldEmRank, Suit>& hand);
+HoldEmRank getHighestCard(const CardSet<HoldEmRank, Suit>& hand);
+std::vector<HoldEmRank> getSortedRanks(const CardSet<HoldEmRank, Suit>& hand);

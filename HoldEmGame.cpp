@@ -197,7 +197,6 @@ int HoldEmGame::play() {
 
 // Overloaded operator<< for printing HoldEmHandRanks
 std::ostream& operator<<(std::ostream& os, const HoldEmHandRank& rank) {
-    // Array of string names corresponding to each PinochleMelds value
     static const std::array<std::string, 15> rankNames = {
         "xhigh", 
         "pair", 
@@ -211,10 +210,249 @@ std::ostream& operator<<(std::ostream& os, const HoldEmHandRank& rank) {
         "undefined"
     };
 
-    // Convert meld to an integer index
     int index = static_cast<int>(rank);
     
-    // Print the name and point value associated with the meld
     os << rankNames[index];
     return os;
+}
+
+bool operator<(const HoldEmGame::Player& player1, const HoldEmGame::Player& player2) {
+    if (player1.handRank != player2.handRank) {
+        return player1.handRank < player2.handRank; 
+    }
+
+    switch (player1.handRank) {
+        case HoldEmHandRank::pair: {
+            auto player1PairRank = getPairRank(player1.hand);
+            auto player2PairRank = getPairRank(player2.hand);
+            if (player1PairRank != player2PairRank) {
+                return player1PairRank < player2PairRank;
+            }
+         
+            auto player1Kickers = getKickers(player1.hand);
+            auto player2Kickers = getKickers(player2.hand);
+            for (size_t i = 0; i < std::min(player1Kickers.size(), player2Kickers.size()); ++i) {
+                if (player1Kickers[i] != player2Kickers[i]) {
+                    return player1Kickers[i] < player2Kickers[i];
+                }
+            }
+            return false; 
+        }
+
+        case HoldEmHandRank::twopair: {
+            auto player1HigherPairRank = getHigherPairRank(player1.hand);
+            auto player2HigherPairRank = getHigherPairRank(player2.hand);
+            if (player1HigherPairRank != player2HigherPairRank) {
+                return player1HigherPairRank < player2HigherPairRank;
+            }
+            auto player1LowerPairRank = getLowerPairRank(player1.hand);
+            auto player2LowerPairRank = getLowerPairRank(player2.hand);
+            if (player1LowerPairRank != player2LowerPairRank) {
+                return player1LowerPairRank < player2LowerPairRank;
+            }
+            auto player1Kicker = getKickers(player1.hand)[0];
+            auto player2Kicker = getKickers(player2.hand)[0];
+            return player1Kicker < player2Kicker;
+        }
+
+        case HoldEmHandRank::threeofakind: {
+            auto player1ThreeRank = getThreeOfAKindRank(player1.hand);
+            auto player2ThreeRank = getThreeOfAKindRank(player2.hand);
+            return player1ThreeRank < player2ThreeRank;
+        }
+
+        case HoldEmHandRank::straight: {
+            auto player1HighestCard = getHighestCard(player1.hand);
+            auto player2HighestCard = getHighestCard(player2.hand);
+            return player1HighestCard < player2HighestCard;
+        }
+
+        case HoldEmHandRank::flush:
+        case HoldEmHandRank::xhigh: {
+            auto player1Ranks = getSortedRanks(player1.hand);
+            auto player2Ranks = getSortedRanks(player2.hand);
+            for (size_t i = 0; i < std::min(player1Ranks.size(), player2Ranks.size()); ++i) {
+                if (player1Ranks[i] != player2Ranks[i]) {
+                    return player1Ranks[i] < player2Ranks[i];
+                }
+            }
+            return false; 
+        }
+
+        case HoldEmHandRank::fullhouse: {
+            auto player1ThreeRank = getThreeOfAKindRank(player1.hand);
+            auto player2ThreeRank = getThreeOfAKindRank(player2.hand);
+            return player1ThreeRank < player2ThreeRank;
+        }
+
+        case HoldEmHandRank::fourofakind: {
+            auto player1FourRank = getFourOfAKindRank(player1.hand);
+            auto player2FourRank = getFourOfAKindRank(player2.hand);
+            return player1FourRank < player2FourRank;
+        }
+
+        case HoldEmHandRank::straightflush: {
+            auto player1HighestCard = getHighestCard(player1.hand);
+            auto player2HighestCard = getHighestCard(player2.hand);
+            return player1HighestCard < player2HighestCard;
+        }
+
+        default:
+            return false; 
+    }
+}
+
+// Implementation of helper functions
+
+HoldEmRank getPairRank(const CardSet<HoldEmRank, Suit>& hand) {
+    std::unordered_map<HoldEmRank, int> rankCount;
+
+    CardSet<HoldEmRank, Suit> localHand = hand;
+
+    std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
+
+    for (const auto& card : cards) {
+        rankCount[card.rank]++;
+    }
+    for (const auto& [rank, count] : rankCount) {
+        if (count == 2) {
+            return rank; 
+        }
+    }
+
+    return HoldEmRank::undefined; 
+}
+
+std::vector<HoldEmRank> getKickers(const CardSet<HoldEmRank, Suit>& hand) {
+    std::unordered_map<HoldEmRank, int> rankCount;
+
+    CardSet<HoldEmRank, Suit> localHand = hand;
+
+    std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
+
+    for (const auto& card : cards) {
+        rankCount[card.rank]++;
+    }
+
+    std::vector<HoldEmRank> kickers;
+
+    for (const auto& [rank, count] : rankCount) {
+        if (count == 1) {
+            kickers.push_back(rank);
+        }
+    }
+
+    std::sort(kickers.rbegin(), kickers.rend());
+
+    return kickers;
+}
+
+HoldEmRank getHigherPairRank(const CardSet<HoldEmRank, Suit>& hand) {
+    std::unordered_map<HoldEmRank, int> rankCount;
+    CardSet<HoldEmRank, Suit> localHand = hand;
+    std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
+
+    for (const auto& card : cards) {
+        rankCount[card.rank]++;
+    }
+
+    HoldEmRank higherPairRank = HoldEmRank::undefined;
+
+    for (const auto& [rank, count] : rankCount) {
+        if (count >= 2) {
+            if (higherPairRank == HoldEmRank::undefined || rank > higherPairRank) {
+                higherPairRank = rank;
+            }
+        }
+    }
+
+    return higherPairRank;
+}
+
+HoldEmRank getLowerPairRank(const CardSet<HoldEmRank, Suit>& hand) {
+    std::unordered_map<HoldEmRank, int> rankCount;
+    CardSet<HoldEmRank, Suit> localHand = hand;
+    std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
+
+    for (const auto& card : cards) {
+        rankCount[card.rank]++;
+    }
+
+    HoldEmRank lowerPairRank = HoldEmRank::undefined;
+
+    for (const auto& [rank, count] : rankCount) {
+        if (count >= 2) {
+            if (lowerPairRank == HoldEmRank::undefined || rank < lowerPairRank) {
+                lowerPairRank = rank;
+            }
+        }
+    }
+
+    return lowerPairRank;
+}
+
+HoldEmRank getFourOfAKindRank(const CardSet<HoldEmRank, Suit>& hand) {
+    std::unordered_map<HoldEmRank, int> rankCount;
+    CardSet<HoldEmRank, Suit> localHand = hand;
+    std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
+
+    for (const auto& card : cards) {
+        rankCount[card.rank]++;
+    }
+
+    for (const auto& [rank, count] : rankCount) {
+        if (count == 4) {
+            return rank;
+        }
+    }
+
+    return HoldEmRank::undefined;
+}
+
+HoldEmRank getThreeOfAKindRank(const CardSet<HoldEmRank, Suit>& hand) {
+    std::unordered_map<HoldEmRank, int> rankCount;
+    CardSet<HoldEmRank, Suit> localHand = hand;
+    std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
+
+    for (const auto& card : cards) {
+        rankCount[card.rank]++;
+    }
+
+    for (const auto& [rank, count] : rankCount) {
+        if (count == 3) {
+            return rank;
+        }
+    }
+
+    return HoldEmRank::undefined;
+}
+
+HoldEmRank getHighestCard(const CardSet<HoldEmRank, Suit>& hand) {
+    CardSet<HoldEmRank, Suit> localHand = hand;
+    std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
+
+    HoldEmRank highestRank = HoldEmRank::undefined;
+
+    for (const auto& card : cards) {
+        if (card.rank > highestRank) {
+            highestRank = card.rank;
+        }
+    }
+
+    return highestRank;
+}
+
+std::vector<HoldEmRank> getSortedRanks(const CardSet<HoldEmRank, Suit>& hand) {
+    CardSet<HoldEmRank, Suit> localHand = hand;
+    std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
+
+    std::vector<HoldEmRank> ranks;
+
+    for (const auto& card : cards) {
+        ranks.push_back(card.rank);
+    }
+
+    std::sort(ranks.begin(), ranks.end(), std::greater<HoldEmRank>());
+    
+    return ranks;
 }
