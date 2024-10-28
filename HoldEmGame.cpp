@@ -112,3 +112,27 @@ int HoldEmGame::play() {
 
     return SUCCESS;
 }
+
+// Overloaded operator<< for printing HoldEmHandRanks
+std::ostream& operator<<(std::ostream& os, const HoldEmHandRank& rank) {
+    // Array of string names corresponding to each PinochleMelds value
+    static const std::array<std::string, 15> rankNames = {
+        "xhigh", 
+        "pair", 
+        "twopair", 
+        "threeofakind", 
+        "straight", 
+        "flush", 
+        "fullhouse", 
+        "fourofakind", 
+        "straightflush", 
+        "undefined"
+    };
+
+    // Convert meld to an integer index
+    int index = static_cast<int>(rank);
+    
+    // Print the name and point value associated with the meld
+    os << rankNames[index];
+    return os;
+}

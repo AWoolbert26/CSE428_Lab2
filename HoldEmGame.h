@@ -26,6 +26,19 @@ enum class HoldEmState {
     undefined  
 };
 
+enum class HoldEmHandRank {
+    xhigh, 
+    pair, 
+    twopair, 
+    threeofakind, 
+    straight, 
+    flush, 
+    fullhouse, 
+    fourofakind, 
+    straightflush, 
+    undefined
+};
+
 class HoldEmGame : public Game {
 private:
 
@@ -45,3 +58,5 @@ public:
     int play() override;
     virtual ~HoldEmGame() = default;
 };
+
+std::ostream& operator<<(std::ostream&, const HoldEmHandRank&);
