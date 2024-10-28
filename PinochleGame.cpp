@@ -59,6 +59,7 @@ int PinochleGame::play() {
     return SUCCESS_END_OF_GAME;  
 }
 
+// Point values for varius PinochleMelds
 std::array<unsigned int, 15> PinochleGame::meldPoints = {
     10,   // dix
     20,   // offsuitmarriage
@@ -76,3 +77,21 @@ std::array<unsigned int, 15> PinochleGame::meldPoints = {
     1000, // thousandaces
     1500  // insuitdoublerun
 };
+
+// Overloaded operator<< for printing PinochleMelds
+std::ostream& operator<<(std::ostream& os, const PinochleMelds& meld) {
+    // Array of string names corresponding to each PinochleMelds value
+    static const std::array<std::string, 15> meldNames = {
+        "dix", "offsuitmarriage", "fortyjacks", "pinochle", "insuitmarriage",
+        "sixtyqueens", "eightykings", "hundredaces", "insuitrun", "doublepinochle",
+        "fourhundredjacks", "sixhundredqueens", "eighthundredkings", "thousandaces",
+        "insuitdoublerun"
+    };
+
+    // Convert meld to an integer index
+    int index = static_cast<int>(meld);
+    
+    // Print the name and point value associated with the meld
+    os << meldNames[index] << " " << PinochleGame::meldPoints[index];
+    return os;
+}

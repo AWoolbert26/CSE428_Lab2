@@ -18,7 +18,7 @@
 #include "Suit.h"
 #include "Constants.h"
 
-enum class PinochleMeld {
+enum class PinochleMelds {
     dix, 
     offsuitmarriage, 
     fortyjacks, 
@@ -53,3 +53,5 @@ public:
 
     static std::array<unsigned int, 15> meldPoints;
 };
+
+std::ostream& operator<<(std::ostream&, const PinochleMelds&);
