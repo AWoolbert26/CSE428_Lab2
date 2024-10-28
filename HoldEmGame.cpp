@@ -11,6 +11,7 @@
 #include "HoldEmGame.h"
 #include "Game.h"
 #include "Constants.h"
+#include <algorithm>
 
 // Initialize the state to preflop and pass parameters to the game base class
 HoldEmGame::HoldEmGame(int argc, const char* argv[]): Game(argc, argv), game_state(HoldEmState::preflop), deck(), board_cards() {
@@ -79,6 +80,87 @@ void HoldEmGame::collectCards() {
         deck.collect(player_hands[i]); 
     }
     deck.collect(board_cards); 
+}
+
+HoldEmHandRank HoldEmGame::holdEmHandEvaluation(const CardSet<HoldEmRank, Suit>& hand) {
+
+    CardSet<HoldEmRank, Suit> localHand = hand;
+
+    std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
+
+    // Check if the hand has exactly five cards
+    if (cards.size() != 5) {
+        return HoldEmHandRank::undefined;
+    }
+
+    std::sort(cards.begin(), cards.end(), [](const Card<HoldEmRank, Suit>& a, const Card<HoldEmRank, Suit>& b) {
+        return compareByRankThenSuit(a, b);
+    });
+
+    // Check for Flush
+    bool isFlush = std::all_of(cards.begin(), cards.end(), [&](const Card<HoldEmRank, Suit>& card) {
+        return card.suit == cards[0].suit; 
+    });
+
+    // Check for Straight
+    bool isStraight = true;
+    for (size_t i = 0; i < 4; ++i) {
+        if (static_cast<int>(cards[i + 1].rank) != static_cast<int>(cards[i].rank) + 1) {
+            isStraight = false;
+            break;
+        }
+    }
+
+    // Special case for A, 2, 3, 4, 5
+    if (
+        !isStraight && cards[0].rank == HoldEmRank::two && cards[1].rank == HoldEmRank::three &&
+        cards[2].rank == HoldEmRank::four && cards[3].rank == HoldEmRank::five &&
+        cards[4].rank == HoldEmRank::ace) {
+        isStraight = true;
+    }
+
+    // Check for four of a kind, full house, three of a kind, two pair, and pair
+    std::unordered_map<HoldEmRank, int> rankCount;
+    for (const auto& card : cards) {
+        rankCount[card.rank]++;
+    }
+
+    bool hasFourOfAKind = false;
+    bool hasThreeOfAKind = false;
+    bool hasPair = false;
+    int pairCount = 0;
+
+    for (const auto& [rank, count] : rankCount) {
+        if (count == 4) {
+            hasFourOfAKind = true;
+        } else if (count == 3) {
+            hasThreeOfAKind = true;
+        } else if (count == 2) {
+            hasPair = true;
+            pairCount++;
+        }
+    }
+
+    // Determine hand rank
+    if (isFlush && isStraight) {
+        return HoldEmHandRank::straightflush;
+    } else if (hasFourOfAKind) {
+        return HoldEmHandRank::fourofakind;
+    } else if (hasThreeOfAKind && pairCount == 1) {
+        return HoldEmHandRank::fullhouse;
+    } else if (isFlush) {
+        return HoldEmHandRank::flush;
+    } else if (isStraight) {
+        return HoldEmHandRank::straight;
+    } else if (hasThreeOfAKind) {
+        return HoldEmHandRank::threeofakind;
+    } else if (pairCount == 2) {
+        return HoldEmHandRank::twopair;
+    } else if (hasPair) {
+        return HoldEmHandRank::pair;
+    } else {
+        return HoldEmHandRank::xhigh;
+    }
 }
 
 int HoldEmGame::play() {

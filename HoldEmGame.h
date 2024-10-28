@@ -52,6 +52,8 @@ private:
     void printBoard();
     void collectCards();
 
+    HoldEmHandRank holdEmHandEvaluation(const CardSet<HoldEmRank, Suit>&);
+
 public:
 
     HoldEmGame(int, const char* []);
