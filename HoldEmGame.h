@@ -62,12 +62,11 @@ public:
         HoldEmHandRank handRank;         // Player's hand rank
 
         // Constructor for Player struct
-        Player(const CardSet<HoldEmRank, Suit>& hand, const std::string& name, HoldEmHandRank handRank)
-            : hand(hand), name(name), handRank(handRank) {}
+        Player(const CardSet<HoldEmRank, Suit>&, const std::string&, HoldEmHandRank);
     };
 
     HoldEmGame(int, const char* []);
-    int play() override;
+    virtual int play() override;
     virtual ~HoldEmGame() = default;
 };
 
@@ -75,7 +74,7 @@ public:
 std::ostream& operator<<(std::ostream&, const HoldEmHandRank&);
 
 // Check which player has the higher ranked hand
-bool operator<(const HoldEmGame::Player& lhs, const HoldEmGame::Player& rhs);
+bool operator<(const HoldEmGame::Player& player1, const HoldEmGame::Player& player2);
 
 // Helper functions to extract ranks and values
 HoldEmRank getPairRank(const CardSet<HoldEmRank, Suit>& hand);

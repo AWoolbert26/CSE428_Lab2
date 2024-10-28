@@ -21,6 +21,8 @@ HoldEmGame::HoldEmGame(int argc, const char* argv[]): Game(argc, argv), game_sta
     }
 }
 
+HoldEmGame::Player::Player(const CardSet<HoldEmRank, Suit>& hand, const std::string& name, HoldEmHandRank handRank): hand(hand), name(name), handRank(handRank) {}
+
 // Deal cards to each player and manage the game state
 void HoldEmGame::deal() {
     switch (game_state) {
