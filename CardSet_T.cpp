@@ -1,5 +1,5 @@
 /*
- * File: CardSet.cpp
+ * File: CardSet_T.cpp
  * 
  * Andrew Woolbert - a.s.woolbert@wustl.edu
  * Daniel Tymoshenko d.tymoshenko@wustl.edu
@@ -46,4 +46,10 @@ CardSet<Rank, Suits>& CardSet<Rank, Suits>::operator>>(CardSet<Rank, Suits>& oth
     cards.pop_back();
 
     return *this;
+}
+
+// Return a pointer to the cards member variable of a CardSet object
+template <typename Rank, typename Suits>
+std::vector<Card<Rank, Suits> >* CardSet<Rank, Suits>::getCards(CardSet<Rank, Suits>& cardSet) {
+    return &cardSet.cards;
 }
