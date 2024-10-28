@@ -179,6 +179,34 @@ int HoldEmGame::play() {
         std::cout << "BOARD (flop): \n";
         printBoard();
 
+        std::vector<Player> playerHands;
+
+        for (size_t i = 0; i < player_names.size(); ++i) {
+            playerHands.emplace_back(player_hands[i], player_names[i], HoldEmHandRank::undefined);
+        }
+
+        for (auto& playerHand : playerHands) {
+
+            CardSet<HoldEmRank, Suit> board_cards_copy = board_cards;
+
+            for (int i = 0; i < 3; i++) {
+                board_cards_copy >> playerHand.hand;
+            }
+
+            playerHand.handRank = holdEmHandEvaluation(playerHand.hand); // Evaluate hand rank
+        }
+
+        std::sort(playerHands.begin(), playerHands.end(), [](const Player& a, const Player& b) {
+            return a < b; 
+        });
+
+        for (int i = playerHands.size() - 1; i >= 0; i--) {
+            std::cout << playerHands[i].name << " ";
+            playerHands[i].hand.print(std::cout, 5);
+            std::cout << " " << playerHands[i].handRank << std::endl;
+        }
+
+
         deal();
 
         std::cout << "BOARD (turn): \n";
@@ -225,12 +253,14 @@ bool operator<(const HoldEmGame::Player& player1, const HoldEmGame::Player& play
         case HoldEmHandRank::pair: {
             auto player1PairRank = getPairRank(player1.hand);
             auto player2PairRank = getPairRank(player2.hand);
+
             if (player1PairRank != player2PairRank) {
                 return player1PairRank < player2PairRank;
             }
          
             auto player1Kickers = getKickers(player1.hand);
             auto player2Kickers = getKickers(player2.hand);
+
             for (size_t i = 0; i < std::min(player1Kickers.size(), player2Kickers.size()); ++i) {
                 if (player1Kickers[i] != player2Kickers[i]) {
                     return player1Kickers[i] < player2Kickers[i];
