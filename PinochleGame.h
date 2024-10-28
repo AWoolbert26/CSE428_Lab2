@@ -42,6 +42,7 @@ private:
     std::vector<CardSet<PinochleRank, Suit> > player_hands;
 
     virtual void deal();
+   
 
     // Modular functions
     void printPlayerHands();
@@ -52,6 +53,7 @@ public:
     virtual ~PinochleGame() = default;
 
     static std::array<unsigned int, 15> meldPoints;
+    void suitIndependentEvaluation(const CardSet<PinochleRank, Suit>&, std::vector<PinochleMelds>&);
 };
 
 std::ostream& operator<<(std::ostream&, const PinochleMelds&);

@@ -9,7 +9,10 @@
  */
 
 #include "PinochleGame.h"
+#include "PinochleDeck.h"
+#include "Suit.h"
 #include "Constants.h"
+#include <iostream>
 #include <array>
 
 // PinochleGame constructor: Initializes player hands based on number of players
@@ -30,6 +33,105 @@ void PinochleGame::deal() {
         player_index = (player_index + 1) % player_hands.size();  // Move to the next player
     }
 }
+
+// Independent suit evaluation function: 
+void suitIndependentEvaluation(const CardSet<PinochleRank, Suit>& hand, std::vector<PinochleMelds>& melds) {
+    CardSet<PinochleRank, Suit> localHand = hand;
+
+    // Track counts of aces, kings, queens, and jacks
+    std::unordered_map<Suit, int> aceSuitCount;
+    std::unordered_map<Suit, int> kingSuitCount;
+    std::unordered_map<Suit, int> queenSuitCount;
+    std::unordered_map<Suit, int> jackSuitCount;
+
+    // Count the occurrences of each specific card rank per suit
+    for (const auto& card : *(localHand.getCards(localHand))) { // Dereference the pointer here
+        if (card.rank == PinochleRank::ace) {
+            aceSuitCount[card.suit]++;
+        } else if (card.rank == PinochleRank::king) {
+            kingSuitCount[card.suit]++;
+        } else if (card.rank == PinochleRank::queen) {
+            queenSuitCount[card.suit]++;
+        } else if (card.rank == PinochleRank::jack) {
+            jackSuitCount[card.suit]++;
+        }
+    }
+
+    // Check for Ace Melds
+    if (
+        aceSuitCount[Suit::spades] == 2 &&
+        aceSuitCount[Suit::hearts] == 2 &&
+        aceSuitCount[Suit::diamonds] == 2 &&
+        aceSuitCount[Suit::clubs] == 2
+    ) {
+        melds.push_back(PinochleMelds::thousandaces);
+    } else if  (
+        aceSuitCount[Suit::spades] >= 1 &&
+        aceSuitCount[Suit::hearts] >= 1 &&
+        aceSuitCount[Suit::diamonds] >= 1 &&
+        aceSuitCount[Suit::clubs] >= 1
+    ) {
+        melds.push_back(PinochleMelds::hundredaces);
+    }
+
+    // Check for King Melds
+    if (
+        kingSuitCount[Suit::spades] == 2 &&
+        kingSuitCount[Suit::hearts] == 2 &&
+        kingSuitCount[Suit::diamonds] == 2 &&
+        kingSuitCount[Suit::clubs] == 2
+    ) {
+        melds.push_back(PinochleMelds::eighthundredkings);
+    } else if (
+        kingSuitCount[Suit::spades] >= 1 &&
+        kingSuitCount[Suit::hearts] >= 1 &&
+        kingSuitCount[Suit::diamonds] >= 1 &&
+        kingSuitCount[Suit::clubs] >= 1
+    ) {
+        melds.push_back(PinochleMelds::eightykings);
+    }
+
+    // Check for Queen Melds
+    if (
+        queenSuitCount[Suit::spades] == 2 &&
+        queenSuitCount[Suit::hearts] == 2 &&
+        queenSuitCount[Suit::diamonds] == 2 &&
+        queenSuitCount[Suit::clubs] == 2
+    ) {
+        melds.push_back(PinochleMelds::sixhundredqueens);
+    } else if (
+        queenSuitCount[Suit::spades] >= 1 &&
+        queenSuitCount[Suit::hearts] >= 1 &&
+        queenSuitCount[Suit::diamonds] >= 1 &&
+        queenSuitCount[Suit::clubs] >= 1
+    ) {
+        melds.push_back(PinochleMelds::sixtyqueens);
+    }
+
+    // Check for Jack Melds
+    if (
+        jackSuitCount[Suit::spades] == 2 &&
+        jackSuitCount[Suit::hearts] == 2 &&
+        jackSuitCount[Suit::diamonds] == 2 &&
+        jackSuitCount[Suit::clubs] == 2
+    ) {
+        melds.push_back(PinochleMelds::fourhundredjacks);
+    } else if (
+        jackSuitCount[Suit::spades] >= 1 &&
+        jackSuitCount[Suit::hearts] >= 1 &&
+        jackSuitCount[Suit::diamonds] >= 1 &&
+        jackSuitCount[Suit::clubs] >= 1
+    ) {
+        melds.push_back(PinochleMelds::fortyjacks);
+    }
+
+    // Check for Pinochle melds
+    if (jackSuitCount[Suit::diamonds] >= 2 && queenSuitCount[Suit::spades] >= 2) {
+        melds.push_back(PinochleMelds::doublepinochle);
+    } else if (jackSuitCount[Suit::diamonds] >= 1 && queenSuitCount[Suit::spades] >= 1) {
+        melds.push_back(PinochleMelds::pinochle);
+    }
+};
 
 // Print function: Print the name and hand of each player
 void PinochleGame::printPlayerHands() {
