@@ -237,7 +237,9 @@ Testing:
 
         Do you want to end the game? (yes or no):
 
-        The game started successfully which is totally right!
+        The game started successfully which is totally right! This passes cases 2 and 3 in step 19 of the lab. the correct combination of cards is produced for each player with everyone having
+        the three cards from the common board in addition to their own two unique card and the list of ranked hands being displayed correctly. They are printed from highest ranked to lowest with
+        two pair winning, the pairs beneath, and then the high cards listed below those. Even thi high cards are listed in correct order!
 
     14) HoldEm game, only two players provided, which is also correct: ./lab2 HoldEm Bob1 Bob2
         Bob1's hand:
