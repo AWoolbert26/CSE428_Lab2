@@ -209,3 +209,122 @@ Testing:
         (Exit code 13)
 
         The error is treated correctly.
+
+    No we move on a second stage of testing, we will check that appropriate suit independent melds are identified for each hand in the Pinochle game.
+
+    16) We will run the Pinochle game and play a few rounds to see if our program correctly detects melds: ./lab2 Pinochle 1 2 3 4
+        1's hand:
+        QH JD JS KC 10D KS JS AH 10S 9S JH 10H 
+
+        2's hand:
+        AD QD QD QC JC QH 9D KD JH 10C 10S 10C 
+
+        3's hand:
+        AH KH 9C AC 10H JD KD 10D KH 9D AS AD 
+        hundredaces 100
+
+        4's hand:
+        9S 9H JC AC QC AS 9H QS QS KC 9C KS 
+
+        Do you want to end the game? (yes or no): 
+
+        Here in hand 3 hundredaces was detected which is a combination of aces of all suits. There are in fact all four suits in 3's hand, AH, AC, AS and AD.
+        The number of points is 100 which is right since "hundredaces is worth 100 points" from the lab manual.
+        By manually checking I cannot see any other melds in these four hands.
+
+        We run next round by answering "no" to the question if we want to quit the game.
+
+        1's hand:
+        10H KH JC AH 9H QS KH 9S AS 9C 10D KD 
+
+        2's hand:
+        9D KD QD QC JS KS QD 9D AD JH QC 10S 
+
+        3's hand:
+        QS AH 10H 9H KC KC 10C JD AD QH QH 10D 
+        pinochle 40
+
+        4's hand:
+        JS 10C JD 10S AS 9S JC JH AC KS 9C AC 
+        fortyjacks 40
+
+
+        Do you want to end the game? (yes or no): 
+
+        Here a pinochle was found in 3's which stands for a jack of diamonds and a queen of spades. In fact 3's hand has QS and JD.
+        Pinochle is worse 40 which is right according to the lab manual, saying "pinochle is worth 40 points"
+
+        4's hand has a fortyjacks which stands for having a jack of each suit. In fact 4's hand has JS, JD, JC and JH.
+        It displays that a fortyjack is worse 40 which is right: "fortyjacks is worth 40 points".
+
+        I cannot see any other melds in here, which agrees with out output.
+
+        Next round:
+        1's hand:
+        10S 10C KH QD 9D QH 10H JD KD JH KC 9S 
+
+        2's hand:
+        9D QH KC AC 10S 9H AC QD 10D JH 9H 9C 
+
+        3's hand:
+        QC 9C AD KD KS JS AD 10C QC JS AS JC 
+
+        4's hand:
+        JC 10H AS KH QS AH 10D 9S AH JD KS QS 
+        pinochle 40
+
+        Here pinochle is found is 4's hand. That's right as 4's hand has JD and QS.
+        Again 40 is the right number of points for a pinochle.
+        I don't see any other melds, which agrees with the output.
+
+        For now let's finish this game and try playing a new game to seek for some other melds.
+
+    17) Again we run Pinochle game but now I will skip some rounds in which no new melds arise from those which we already found: ./lab2 Pinochle 1 2 3 4
+        After a few rounds I got:
+
+        1's hand:
+        9C 10S QS 10H KD AC QH QH QD 10S 9H AS 
+
+        2's hand:
+        9C QS JH JS JC AD AC AS AH JS 9D 10H 
+        hundredaces 100
+
+        3's hand:
+        KH 9S JH KC 10D 10D AH 9H 9S 10C QC JD 
+
+        4's hand:
+        KC KS KH KS QC 9D KD AD JC 10C JD QD 
+        eightykings 80
+
+        We can see a new meld - 4's hand has eightykings which stands for having a king of each suit.
+        4's hand in fact has KC, KS, KH and KS, so the meld was found correctly.
+        The output shows that eightykings is worse 80, which is correct by lab manual, "eightykings is worth 80 points"
+
+        Here 2's has hundredaces which is a combination of all 4 aces of all suits. Even though we found it before let's just double check.
+        2's hand in fact has AD, AC, AS and AH.
+        Also the number of points for this meld is 100 which is right.
+
+    18) Let's move to the next stage and now test Hold'Em.
+        We will play a few rounds and check if the card combinations are produced and ranked correctly: ./lab2 HoldEm 1 2
+
+        1's hand:
+        6S 3H 
+        2's hand:
+        KD JC 
+        BOARD (flop): 
+        2H 5S 2C 
+        2 KD JC 2C 5S 2H 
+        pair
+        1 6S 3H 2C 5S 2H 
+        pair
+        BOARD (turn): 
+        2H 5S 2C QD 
+        BOARD (river): 
+        2H 5S 2C QD 4H 
+
+
+
+
+
+
+
