@@ -55,7 +55,6 @@ Development Process:
      - Added names and emails of all contributers at the top of this file.
 
 
-
 Testing:
 
 -Testing for different command line arguments:
