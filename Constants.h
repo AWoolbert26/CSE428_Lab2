@@ -19,6 +19,7 @@ constexpr int USAGE_HOLDEM_ERROR = 9;
 constexpr int USAGE_UKNOWN_GAME_ERROR = 10;
 constexpr int GAME_CREATION_ERROR = 11;
 constexpr int SHIFT_FROM_EMPTY_SET = 12;
+constexpr int PLAYERS_HAVE_SAME_NAMES = 13;
 
 
 constexpr int HOLD_EM_HAND_SIZE = 2;
