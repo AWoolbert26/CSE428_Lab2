@@ -253,15 +253,15 @@ bool operator<(const HoldEmGame::Player& player1, const HoldEmGame::Player& play
 
     switch (player1.handRank) {
         case HoldEmHandRank::pair: {
-            auto player1PairRank = getPairRank(player1.hand);
-            auto player2PairRank = getPairRank(player2.hand);
+            auto player1PairRank = HoldEmGame::getPairRank(player1.hand);
+            auto player2PairRank = HoldEmGame::getPairRank(player2.hand);
 
             if (player1PairRank != player2PairRank) {
                 return player1PairRank < player2PairRank;
             }
          
-            auto player1Kickers = getKickers(player1.hand);
-            auto player2Kickers = getKickers(player2.hand);
+            auto player1Kickers = HoldEmGame::getKickers(player1.hand);
+            auto player2Kickers = HoldEmGame::getKickers(player2.hand);
 
             for (size_t i = 0; i < std::min(player1Kickers.size(), player2Kickers.size()); ++i) {
                 if (player1Kickers[i] != player2Kickers[i]) {
@@ -272,37 +272,37 @@ bool operator<(const HoldEmGame::Player& player1, const HoldEmGame::Player& play
         }
 
         case HoldEmHandRank::twopair: {
-            auto player1HigherPairRank = getHigherPairRank(player1.hand);
-            auto player2HigherPairRank = getHigherPairRank(player2.hand);
+            auto player1HigherPairRank = HoldEmGame::getHigherPairRank(player1.hand);
+            auto player2HigherPairRank = HoldEmGame::getHigherPairRank(player2.hand);
             if (player1HigherPairRank != player2HigherPairRank) {
                 return player1HigherPairRank < player2HigherPairRank;
             }
-            auto player1LowerPairRank = getLowerPairRank(player1.hand);
-            auto player2LowerPairRank = getLowerPairRank(player2.hand);
+            auto player1LowerPairRank = HoldEmGame::getLowerPairRank(player1.hand);
+            auto player2LowerPairRank = HoldEmGame::getLowerPairRank(player2.hand);
             if (player1LowerPairRank != player2LowerPairRank) {
                 return player1LowerPairRank < player2LowerPairRank;
             }
-            auto player1Kicker = getKickers(player1.hand)[0];
-            auto player2Kicker = getKickers(player2.hand)[0];
+            auto player1Kicker = HoldEmGame::getKickers(player1.hand)[0];
+            auto player2Kicker = HoldEmGame::getKickers(player2.hand)[0];
             return player1Kicker < player2Kicker;
         }
 
         case HoldEmHandRank::threeofakind: {
-            auto player1ThreeRank = getThreeOfAKindRank(player1.hand);
-            auto player2ThreeRank = getThreeOfAKindRank(player2.hand);
+            auto player1ThreeRank = HoldEmGame::getThreeOfAKindRank(player1.hand);
+            auto player2ThreeRank = HoldEmGame::getThreeOfAKindRank(player2.hand);
             return player1ThreeRank < player2ThreeRank;
         }
 
         case HoldEmHandRank::straight: {
-            auto player1HighestCard = getHighestCard(player1.hand);
-            auto player2HighestCard = getHighestCard(player2.hand);
+            auto player1HighestCard = HoldEmGame::getHighestCard(player1.hand);
+            auto player2HighestCard = HoldEmGame::getHighestCard(player2.hand);
             return player1HighestCard < player2HighestCard;
         }
 
         case HoldEmHandRank::flush:
         case HoldEmHandRank::xhigh: {
-            auto player1Ranks = getSortedRanks(player1.hand);
-            auto player2Ranks = getSortedRanks(player2.hand);
+            auto player1Ranks = HoldEmGame::getSortedRanks(player1.hand);
+            auto player2Ranks = HoldEmGame::getSortedRanks(player2.hand);
             for (size_t i = 0; i < std::min(player1Ranks.size(), player2Ranks.size()); ++i) {
                 if (player1Ranks[i] != player2Ranks[i]) {
                     return player1Ranks[i] < player2Ranks[i];
@@ -312,20 +312,20 @@ bool operator<(const HoldEmGame::Player& player1, const HoldEmGame::Player& play
         }
 
         case HoldEmHandRank::fullhouse: {
-            auto player1ThreeRank = getThreeOfAKindRank(player1.hand);
-            auto player2ThreeRank = getThreeOfAKindRank(player2.hand);
+            auto player1ThreeRank = HoldEmGame::getThreeOfAKindRank(player1.hand);
+            auto player2ThreeRank = HoldEmGame::getThreeOfAKindRank(player2.hand);
             return player1ThreeRank < player2ThreeRank;
         }
 
         case HoldEmHandRank::fourofakind: {
-            auto player1FourRank = getFourOfAKindRank(player1.hand);
-            auto player2FourRank = getFourOfAKindRank(player2.hand);
+            auto player1FourRank = HoldEmGame::getFourOfAKindRank(player1.hand);
+            auto player2FourRank = HoldEmGame::getFourOfAKindRank(player2.hand);
             return player1FourRank < player2FourRank;
         }
 
         case HoldEmHandRank::straightflush: {
-            auto player1HighestCard = getHighestCard(player1.hand);
-            auto player2HighestCard = getHighestCard(player2.hand);
+            auto player1HighestCard = HoldEmGame::getHighestCard(player1.hand);
+            auto player2HighestCard = HoldEmGame::getHighestCard(player2.hand);
             return player1HighestCard < player2HighestCard;
         }
 
@@ -336,7 +336,7 @@ bool operator<(const HoldEmGame::Player& player1, const HoldEmGame::Player& play
 
 // Implementation of helper functions
 
-HoldEmRank getPairRank(const CardSet<HoldEmRank, Suit>& hand) {
+HoldEmRank HoldEmGame::getPairRank(const CardSet<HoldEmRank, Suit>& hand) {
     std::unordered_map<HoldEmRank, int> rankCount;
 
     CardSet<HoldEmRank, Suit> localHand = hand;
@@ -355,7 +355,7 @@ HoldEmRank getPairRank(const CardSet<HoldEmRank, Suit>& hand) {
     return HoldEmRank::undefined; 
 }
 
-std::vector<HoldEmRank> getKickers(const CardSet<HoldEmRank, Suit>& hand) {
+std::vector<HoldEmRank> HoldEmGame::getKickers(const CardSet<HoldEmRank, Suit>& hand) {
     std::unordered_map<HoldEmRank, int> rankCount;
 
     CardSet<HoldEmRank, Suit> localHand = hand;
@@ -379,7 +379,7 @@ std::vector<HoldEmRank> getKickers(const CardSet<HoldEmRank, Suit>& hand) {
     return kickers;
 }
 
-HoldEmRank getHigherPairRank(const CardSet<HoldEmRank, Suit>& hand) {
+HoldEmRank HoldEmGame::getHigherPairRank(const CardSet<HoldEmRank, Suit>& hand) {
     std::unordered_map<HoldEmRank, int> rankCount;
     CardSet<HoldEmRank, Suit> localHand = hand;
     std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
@@ -401,7 +401,7 @@ HoldEmRank getHigherPairRank(const CardSet<HoldEmRank, Suit>& hand) {
     return higherPairRank;
 }
 
-HoldEmRank getLowerPairRank(const CardSet<HoldEmRank, Suit>& hand) {
+HoldEmRank HoldEmGame::getLowerPairRank(const CardSet<HoldEmRank, Suit>& hand) {
     std::unordered_map<HoldEmRank, int> rankCount;
     CardSet<HoldEmRank, Suit> localHand = hand;
     std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
@@ -423,7 +423,7 @@ HoldEmRank getLowerPairRank(const CardSet<HoldEmRank, Suit>& hand) {
     return lowerPairRank;
 }
 
-HoldEmRank getFourOfAKindRank(const CardSet<HoldEmRank, Suit>& hand) {
+HoldEmRank HoldEmGame::getFourOfAKindRank(const CardSet<HoldEmRank, Suit>& hand) {
     std::unordered_map<HoldEmRank, int> rankCount;
     CardSet<HoldEmRank, Suit> localHand = hand;
     std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
@@ -441,7 +441,7 @@ HoldEmRank getFourOfAKindRank(const CardSet<HoldEmRank, Suit>& hand) {
     return HoldEmRank::undefined;
 }
 
-HoldEmRank getThreeOfAKindRank(const CardSet<HoldEmRank, Suit>& hand) {
+HoldEmRank HoldEmGame::getThreeOfAKindRank(const CardSet<HoldEmRank, Suit>& hand) {
     std::unordered_map<HoldEmRank, int> rankCount;
     CardSet<HoldEmRank, Suit> localHand = hand;
     std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
@@ -459,7 +459,7 @@ HoldEmRank getThreeOfAKindRank(const CardSet<HoldEmRank, Suit>& hand) {
     return HoldEmRank::undefined;
 }
 
-HoldEmRank getHighestCard(const CardSet<HoldEmRank, Suit>& hand) {
+HoldEmRank HoldEmGame::getHighestCard(const CardSet<HoldEmRank, Suit>& hand) {
     CardSet<HoldEmRank, Suit> localHand = hand;
     std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
 
@@ -474,7 +474,7 @@ HoldEmRank getHighestCard(const CardSet<HoldEmRank, Suit>& hand) {
     return highestRank;
 }
 
-std::vector<HoldEmRank> getSortedRanks(const CardSet<HoldEmRank, Suit>& hand) {
+std::vector<HoldEmRank> HoldEmGame::getSortedRanks(const CardSet<HoldEmRank, Suit>& hand) {
     CardSet<HoldEmRank, Suit> localHand = hand;
     std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
 

@@ -54,6 +54,18 @@ private:
 
     HoldEmHandRank holdEmHandEvaluation(const CardSet<HoldEmRank, Suit>&);
 
+protected:
+
+    // Helper functions to extract ranks and values
+    static HoldEmRank getPairRank(const CardSet<HoldEmRank, Suit>& hand);
+    static std::vector<HoldEmRank> getKickers(const CardSet<HoldEmRank, Suit>& hand);
+    static HoldEmRank getHigherPairRank(const CardSet<HoldEmRank, Suit>& hand);
+    static HoldEmRank getLowerPairRank(const CardSet<HoldEmRank, Suit>& hand);
+    static HoldEmRank getThreeOfAKindRank(const CardSet<HoldEmRank, Suit>& hand);
+    static HoldEmRank getFourOfAKindRank(const CardSet<HoldEmRank, Suit>& hand);
+    static HoldEmRank getHighestCard(const CardSet<HoldEmRank, Suit>& hand);
+    static std::vector<HoldEmRank> getSortedRanks(const CardSet<HoldEmRank, Suit>& hand);
+
 public:
 
     struct Player {
@@ -64,6 +76,8 @@ public:
         // Constructor for Player struct
         Player(const CardSet<HoldEmRank, Suit>&, const std::string&, HoldEmHandRank);
     };
+
+    friend bool operator<(const HoldEmGame::Player& player1, const HoldEmGame::Player& player2);
 
     HoldEmGame(int, const char* []);
     virtual int play() override;
@@ -76,12 +90,3 @@ std::ostream& operator<<(std::ostream&, const HoldEmHandRank&);
 // Check which player has the higher ranked hand
 bool operator<(const HoldEmGame::Player& player1, const HoldEmGame::Player& player2);
 
-// Helper functions to extract ranks and values
-HoldEmRank getPairRank(const CardSet<HoldEmRank, Suit>& hand);
-std::vector<HoldEmRank> getKickers(const CardSet<HoldEmRank, Suit>& hand);
-HoldEmRank getHigherPairRank(const CardSet<HoldEmRank, Suit>& hand);
-HoldEmRank getLowerPairRank(const CardSet<HoldEmRank, Suit>& hand);
-HoldEmRank getThreeOfAKindRank(const CardSet<HoldEmRank, Suit>& hand);
-HoldEmRank getFourOfAKindRank(const CardSet<HoldEmRank, Suit>& hand);
-HoldEmRank getHighestCard(const CardSet<HoldEmRank, Suit>& hand);
-std::vector<HoldEmRank> getSortedRanks(const CardSet<HoldEmRank, Suit>& hand);
