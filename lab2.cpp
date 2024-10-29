@@ -17,6 +17,7 @@
 #include "PinochleGame.h"
 #include "HoldEmGame.h"
 #include "Game.h"
+#include <stdexcept>
 
 std::shared_ptr<Game> create(int argc, const char *argv[]) {
     // Error checking is done before hand so we don't have to do it in the create method.
@@ -85,7 +86,12 @@ int main(int argc, const char* argv[]) {
     }
 
     if (game_ptr) {
-        return game_ptr->play(); 
+        try {
+            return game_ptr->play(); 
+        } catch (std::runtime_error &e) {
+            std::cout << e.what() << std::endl;
+            return GAME_PLAY_FAILURE;
+        }
     } else {
         std::cerr << "Error: Failed to create the game.\n";
         return GAME_CREATION_ERROR; 

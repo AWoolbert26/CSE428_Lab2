@@ -52,7 +52,7 @@ public:
     virtual int play();
     virtual ~PinochleGame() = default;
 
-    static std::array<unsigned int, 15> meldPoints;
+    static std::array<unsigned int, NUM_OF_PINOCHLE_MELDS> meldPoints;
 };
 
 std::ostream& operator<<(std::ostream&, const PinochleMelds&);

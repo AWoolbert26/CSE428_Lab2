@@ -59,76 +59,76 @@ void PinochleGame::suitIndependentEvaluation(const CardSet<PinochleRank, Suit>& 
 
     // Check for Ace Melds
     if (
-        aceSuitCount[Suit::spades] == 2 &&
-        aceSuitCount[Suit::hearts] == 2 &&
-        aceSuitCount[Suit::diamonds] == 2 &&
-        aceSuitCount[Suit::clubs] == 2
+        aceSuitCount[Suit::spades] == NUM_FOR_PINOCHLE_HIGH_MELD &&
+        aceSuitCount[Suit::hearts] == NUM_FOR_PINOCHLE_HIGH_MELD &&
+        aceSuitCount[Suit::diamonds] == NUM_FOR_PINOCHLE_HIGH_MELD &&
+        aceSuitCount[Suit::clubs] == NUM_FOR_PINOCHLE_HIGH_MELD
     ) {
         melds.push_back(PinochleMelds::thousandaces);
     } else if  (
-        aceSuitCount[Suit::spades] >= 1 &&
-        aceSuitCount[Suit::hearts] >= 1 &&
-        aceSuitCount[Suit::diamonds] >= 1 &&
-        aceSuitCount[Suit::clubs] >= 1
+        aceSuitCount[Suit::spades] >= NUM_FOR_PINOCHLE_LOW_MELD &&
+        aceSuitCount[Suit::hearts] >= NUM_FOR_PINOCHLE_LOW_MELD &&
+        aceSuitCount[Suit::diamonds] >= NUM_FOR_PINOCHLE_LOW_MELD &&
+        aceSuitCount[Suit::clubs] >= NUM_FOR_PINOCHLE_LOW_MELD
     ) {
         melds.push_back(PinochleMelds::hundredaces);
     }
 
     // Check for King Melds
     if (
-        kingSuitCount[Suit::spades] == 2 &&
-        kingSuitCount[Suit::hearts] == 2 &&
-        kingSuitCount[Suit::diamonds] == 2 &&
-        kingSuitCount[Suit::clubs] == 2
+        kingSuitCount[Suit::spades] == NUM_FOR_PINOCHLE_HIGH_MELD &&
+        kingSuitCount[Suit::hearts] == NUM_FOR_PINOCHLE_HIGH_MELD &&
+        kingSuitCount[Suit::diamonds] == NUM_FOR_PINOCHLE_HIGH_MELD &&
+        kingSuitCount[Suit::clubs] == NUM_FOR_PINOCHLE_HIGH_MELD
     ) {
         melds.push_back(PinochleMelds::eighthundredkings);
     } else if (
-        kingSuitCount[Suit::spades] >= 1 &&
-        kingSuitCount[Suit::hearts] >= 1 &&
-        kingSuitCount[Suit::diamonds] >= 1 &&
-        kingSuitCount[Suit::clubs] >= 1
+        kingSuitCount[Suit::spades] >= NUM_FOR_PINOCHLE_LOW_MELD &&
+        kingSuitCount[Suit::hearts] >= NUM_FOR_PINOCHLE_LOW_MELD &&
+        kingSuitCount[Suit::diamonds] >= NUM_FOR_PINOCHLE_LOW_MELD &&
+        kingSuitCount[Suit::clubs] >= NUM_FOR_PINOCHLE_LOW_MELD
     ) {
         melds.push_back(PinochleMelds::eightykings);
     }
 
     // Check for Queen Melds
     if (
-        queenSuitCount[Suit::spades] == 2 &&
-        queenSuitCount[Suit::hearts] == 2 &&
-        queenSuitCount[Suit::diamonds] == 2 &&
-        queenSuitCount[Suit::clubs] == 2
+        queenSuitCount[Suit::spades] == NUM_FOR_PINOCHLE_HIGH_MELD &&
+        queenSuitCount[Suit::hearts] == NUM_FOR_PINOCHLE_HIGH_MELD &&
+        queenSuitCount[Suit::diamonds] == NUM_FOR_PINOCHLE_HIGH_MELD &&
+        queenSuitCount[Suit::clubs] == NUM_FOR_PINOCHLE_HIGH_MELD
     ) {
         melds.push_back(PinochleMelds::sixhundredqueens);
     } else if (
-        queenSuitCount[Suit::spades] >= 1 &&
-        queenSuitCount[Suit::hearts] >= 1 &&
-        queenSuitCount[Suit::diamonds] >= 1 &&
-        queenSuitCount[Suit::clubs] >= 1
+        queenSuitCount[Suit::spades] >= NUM_FOR_PINOCHLE_LOW_MELD &&
+        queenSuitCount[Suit::hearts] >= NUM_FOR_PINOCHLE_LOW_MELD &&
+        queenSuitCount[Suit::diamonds] >= NUM_FOR_PINOCHLE_LOW_MELD &&
+        queenSuitCount[Suit::clubs] >= NUM_FOR_PINOCHLE_LOW_MELD
     ) {
         melds.push_back(PinochleMelds::sixtyqueens);
     }
 
     // Check for Jack Melds
     if (
-        jackSuitCount[Suit::spades] == 2 &&
-        jackSuitCount[Suit::hearts] == 2 &&
-        jackSuitCount[Suit::diamonds] == 2 &&
-        jackSuitCount[Suit::clubs] == 2
+        jackSuitCount[Suit::spades] == NUM_FOR_PINOCHLE_HIGH_MELD &&
+        jackSuitCount[Suit::hearts] == NUM_FOR_PINOCHLE_HIGH_MELD &&
+        jackSuitCount[Suit::diamonds] == NUM_FOR_PINOCHLE_HIGH_MELD &&
+        jackSuitCount[Suit::clubs] == NUM_FOR_PINOCHLE_HIGH_MELD
     ) {
         melds.push_back(PinochleMelds::fourhundredjacks);
     } else if (
-        jackSuitCount[Suit::spades] >= 1 &&
-        jackSuitCount[Suit::hearts] >= 1 &&
-        jackSuitCount[Suit::diamonds] >= 1 &&
-        jackSuitCount[Suit::clubs] >= 1
+        jackSuitCount[Suit::spades] >= NUM_FOR_PINOCHLE_LOW_MELD &&
+        jackSuitCount[Suit::hearts] >= NUM_FOR_PINOCHLE_LOW_MELD &&
+        jackSuitCount[Suit::diamonds] >= NUM_FOR_PINOCHLE_LOW_MELD &&
+        jackSuitCount[Suit::clubs] >= NUM_FOR_PINOCHLE_LOW_MELD
     ) {
         melds.push_back(PinochleMelds::fortyjacks);
     }
 
     // Check for Pinochle melds
-    if (jackSuitCount[Suit::diamonds] >= 2 && queenSuitCount[Suit::spades] >= 2) {
+    if (jackSuitCount[Suit::diamonds] >= NUM_FOR_PINOCHLE_HIGH_MELD && queenSuitCount[Suit::spades] >= NUM_FOR_PINOCHLE_HIGH_MELD) {
         melds.push_back(PinochleMelds::doublepinochle);
-    } else if (jackSuitCount[Suit::diamonds] >= 1 && queenSuitCount[Suit::spades] >= 1) {
+    } else if (jackSuitCount[Suit::diamonds] >= NUM_FOR_PINOCHLE_LOW_MELD && queenSuitCount[Suit::spades] >= NUM_FOR_PINOCHLE_LOW_MELD) {
         melds.push_back(PinochleMelds::pinochle);
     }
 };
@@ -173,7 +173,7 @@ int PinochleGame::play() {
 }
 
 // Point values for varius PinochleMelds
-std::array<unsigned int, 15> PinochleGame::meldPoints = {
+std::array<unsigned int, NUM_OF_PINOCHLE_MELDS> PinochleGame::meldPoints = {
     10,   // dix
     20,   // offsuitmarriage
     40,   // fortyjacks

@@ -38,7 +38,7 @@ void HoldEmGame::deal() {
 
         case HoldEmState::flop:
             // Deal three cards to the board
-            for (size_t i = 0; i < 3; ++i) {
+            for (size_t i = 0; i < NUM_FLOP_CARDS; ++i) {
                 deck >> board_cards;
             }
             game_state = HoldEmState::turn;  
@@ -91,7 +91,7 @@ HoldEmHandRank HoldEmGame::holdEmHandEvaluation(const CardSet<HoldEmRank, Suit>&
     std::vector<Card<HoldEmRank, Suit>>& cards = *(localHand.getCards(localHand));
 
     // Check if the hand has exactly five cards
-    if (cards.size() != 5) {
+    if (cards.size() != HOLD_EM_FULL_HAND_SIZE) {
         return HoldEmHandRank::undefined;
     }
 
@@ -106,7 +106,7 @@ HoldEmHandRank HoldEmGame::holdEmHandEvaluation(const CardSet<HoldEmRank, Suit>&
 
     // Check for Straight
     bool isStraight = true;
-    for (size_t i = 0; i < 4; ++i) {
+    for (size_t i = 0; i < ADDITIONAL_CARDS_FOR_VALID_STRAIGHT; ++i) {
         if (static_cast<int>(cards[i + 1].rank) != static_cast<int>(cards[i].rank) + 1) {
             isStraight = false;
             break;
@@ -115,9 +115,9 @@ HoldEmHandRank HoldEmGame::holdEmHandEvaluation(const CardSet<HoldEmRank, Suit>&
 
     // Special case for A, 2, 3, 4, 5
     if (
-        !isStraight && cards[0].rank == HoldEmRank::two && cards[1].rank == HoldEmRank::three &&
-        cards[2].rank == HoldEmRank::four && cards[3].rank == HoldEmRank::five &&
-        cards[4].rank == HoldEmRank::ace) {
+        !isStraight && cards[FIRST].rank == HoldEmRank::two && cards[SECOND].rank == HoldEmRank::three &&
+        cards[THIRD].rank == HoldEmRank::four && cards[FOURTH].rank == HoldEmRank::five &&
+        cards[FIFTH].rank == HoldEmRank::ace) {
         isStraight = true;
     }
 
@@ -133,11 +133,11 @@ HoldEmHandRank HoldEmGame::holdEmHandEvaluation(const CardSet<HoldEmRank, Suit>&
     int pairCount = 0;
 
     for (const auto& [rank, count] : rankCount) {
-        if (count == 4) {
+        if (count == FOUR_OF_A_KIND) {
             hasFourOfAKind = true;
-        } else if (count == 3) {
+        } else if (count == THREE_OF_A_KIND) {
             hasThreeOfAKind = true;
-        } else if (count == 2) {
+        } else if (count == PAIR) {
             hasPair = true;
             pairCount++;
         }
@@ -191,7 +191,7 @@ int HoldEmGame::play() {
 
             CardSet<HoldEmRank, Suit> board_cards_copy = board_cards;
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < NUM_FLOP_CARDS; i++) {
                 board_cards_copy >> playerHand.hand;
             }
 
@@ -202,6 +202,7 @@ int HoldEmGame::play() {
             return a < b; 
         });
 
+        // Backwards because the way std::sort works is the revers of what we want
         for (int i = playerHands.size() - 1; i >= 0; i--) {
             std::cout << playerHands[i].name << " ";
             playerHands[i].hand.print(std::cout, 5);
@@ -227,7 +228,7 @@ int HoldEmGame::play() {
 
 // Overloaded operator<< for printing HoldEmHandRanks
 std::ostream& operator<<(std::ostream& os, const HoldEmHandRank& rank) {
-    static const std::array<std::string, 15> rankNames = {
+    static const std::array<std::string, NUM_OF_HOLD_EM_RANKS> rankNames = {
         "xhigh", 
         "pair", 
         "twopair", 
@@ -347,7 +348,7 @@ HoldEmRank HoldEmGame::getPairRank(const CardSet<HoldEmRank, Suit>& hand) {
         rankCount[card.rank]++;
     }
     for (const auto& [rank, count] : rankCount) {
-        if (count == 2) {
+        if (count == PAIR) {
             return rank; 
         }
     }
@@ -391,7 +392,7 @@ HoldEmRank HoldEmGame::getHigherPairRank(const CardSet<HoldEmRank, Suit>& hand) 
     HoldEmRank higherPairRank = HoldEmRank::undefined;
 
     for (const auto& [rank, count] : rankCount) {
-        if (count >= 2) {
+        if (count >= PAIR) {
             if (higherPairRank == HoldEmRank::undefined || rank > higherPairRank) {
                 higherPairRank = rank;
             }
@@ -413,7 +414,7 @@ HoldEmRank HoldEmGame::getLowerPairRank(const CardSet<HoldEmRank, Suit>& hand) {
     HoldEmRank lowerPairRank = HoldEmRank::undefined;
 
     for (const auto& [rank, count] : rankCount) {
-        if (count >= 2) {
+        if (count >= PAIR) {
             if (lowerPairRank == HoldEmRank::undefined || rank < lowerPairRank) {
                 lowerPairRank = rank;
             }
@@ -433,7 +434,7 @@ HoldEmRank HoldEmGame::getFourOfAKindRank(const CardSet<HoldEmRank, Suit>& hand)
     }
 
     for (const auto& [rank, count] : rankCount) {
-        if (count == 4) {
+        if (count == FOUR_OF_A_KIND) {
             return rank;
         }
     }
@@ -451,7 +452,7 @@ HoldEmRank HoldEmGame::getThreeOfAKindRank(const CardSet<HoldEmRank, Suit>& hand
     }
 
     for (const auto& [rank, count] : rankCount) {
-        if (count == 3) {
+        if (count == THREE_OF_A_KIND) {
             return rank;
         }
     }
